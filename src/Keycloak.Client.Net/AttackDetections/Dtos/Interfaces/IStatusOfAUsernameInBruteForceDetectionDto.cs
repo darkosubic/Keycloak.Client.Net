@@ -1,4 +1,4 @@
-﻿namespace Keycloak.Client.Net.AttackDetections.Dtos.Interface
+﻿namespace Keycloak.Client.Net.AttackDetections.Dtos.Interfaces
 {
     public interface IStatusOfAUsernameInBruteForceDetectionDto
     {

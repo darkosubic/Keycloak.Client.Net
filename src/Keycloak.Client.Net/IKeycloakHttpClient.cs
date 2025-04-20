@@ -1,5 +1,7 @@
 ﻿using Keycloak.Client.Net.AttackDetections;
+using Keycloak.Client.Net.Groups;
 using RestSharp;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Keycloak.Client.Net
@@ -8,9 +10,12 @@ namespace Keycloak.Client.Net
     {
         string BaseUrl { get; }
         RealmSettings RealmSettings { get; }
+        void AddQueryStrings(Dictionary<string, string> queryStrings);
+        void AddJsonBodyParameters(object obj);
         Task<RestRequest> Create(string endpoint, Method method);
         Task<RestResponse> Execute();
 
         IAttackDetection AttackDetections { get; set; }
+        IGroups Groups { get; set; }
     }
 }

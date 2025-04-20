@@ -1,0 +1,72 @@
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace Keycloak.Client.Net.Users.DTOs
+{
+    public class CredentialRepresentationDto
+    {
+        public CredentialRepresentationDto()
+        {
+            Config = new Dictionary<object, object>();
+        }
+
+        [JsonPropertyName("id")]
+        public string Id { get; set; }
+
+        [JsonPropertyName("type")]
+        public string Type { get; set; }
+
+        [JsonPropertyName("userLabel")]
+        public string UserLabel { get; set; }
+
+        [JsonPropertyName("createdDate")]
+        public long CreatedDate { get; set; }
+
+        [JsonPropertyName("secretData")]
+        public string SecretData { get; set; }
+
+        [JsonPropertyName("credentialData")]
+        public string CredentialData { get; set; }
+
+        [JsonPropertyName("priority")]
+        public int? Priority { get; set; }
+
+        [JsonPropertyName("value")]
+        public string Value { get; set; }
+
+        [JsonPropertyName("temporary")]
+        public bool? Temporary { get; set; }
+
+        [JsonPropertyName("device")]
+        public bool? Device { get; set; }
+
+        [JsonPropertyName("hashedSaltedValue")]
+        public string HashedSaltedValue { get; set; }
+
+        [JsonPropertyName("salt")]
+        public string Salt { get; set; }
+
+        [JsonPropertyName("hashIterations")]
+        public int? HashIterations { get; set; }
+
+        [JsonPropertyName("counter")]
+        public string Counter { get; set; }
+
+        [JsonPropertyName("algorithm")]
+        public string Algorithm { get; set; }
+
+        [JsonPropertyName("digits")]
+        public int? Digits { get; set; }
+
+        [JsonPropertyName("period")]
+        public int? period { get; set; }
+
+        //TODO investigate which Dictionary
+        [JsonPropertyName("config")]
+        public Dictionary<object, object> Config { get; set; }
+
+        [JsonPropertyName("federationLink")]
+        public string FederationLink { get; set; }
+    }
+
+}

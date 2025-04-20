@@ -1,6 +1,6 @@
 ﻿using Ardalis.Result;
 using Keycloak.Client.Net.AttackDetections.Dtos;
-using Keycloak.Client.Net.AttackDetections.Dtos.Interface;
+using Keycloak.Client.Net.AttackDetections.Dtos.Interfaces;
 using Keycloak.Client.Net.Extensions;
 using RestSharp;
 using System;

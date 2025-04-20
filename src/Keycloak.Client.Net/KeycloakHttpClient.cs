@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Keycloak.Client.Net.AttackDetections;
+using Keycloak.Client.Net.Groups;
 using Polly.Retry;
 using RestSharp;
 using static Keycloak.Client.Net.Constants.RouteConstants;
@@ -63,20 +65,60 @@ namespace Keycloak.Client.Net
             }
         }
 
+        private readonly object _groupsLock = new object();
+        private IGroups _groups;
+        public IGroups Groups
+        {
+            get
+            {
+                if (_groups == null)
+                {
+                    lock (_groupsLock)
+                    {
+                        if (_groups == null)
+                        {
+                            _groups = new Group(this);
+                        }
+                    }
+                }
+                return _groups;
+            }
+            set
+            {
+                lock (_groupsLock)
+                {
+                    _groups = value;
+                }
+            }
+        }
+
         public async Task<RestResponse> Execute()
         {
             if (_retryPolicy != null)
             {
-                await _retryPolicy.ExecuteAsync(async () =>
-                {
-                    return await _restClient.ExecuteAsync(Request);
-                });
+                return await _retryPolicy.ExecuteAsync(() => _restClient.ExecuteAsync(Request));
             }
 
             return await _restClient.ExecuteAsync(Request);
         }
 
+        public void AddQueryStrings(Dictionary<string, string> queryStrings)
+        {
+            if (queryStrings == null || queryStrings.Count == 0)
+            {
+                return;
+            }
 
+            foreach (KeyValuePair<string, string> queryString in queryStrings)
+            {
+                Request.AddQueryParameter(queryString.Key, queryString.Value);
+            }
+        }
+
+        public void AddJsonBodyParameters(object obj)
+        {
+            Request.AddJsonBody(JsonSerializer.Serialize(obj));
+        }
         public async Task<RestRequest> Create(string endpoint, Method method)
         {
             if (Request == null)

@@ -1,4 +1,4 @@
-﻿using Keycloak.Client.Net.AttackDetections.Dtos.Interface;
+﻿using Keycloak.Client.Net.AttackDetections.Dtos.Interfaces;
 using System.Text.Json.Serialization;
 
 namespace Keycloak.Client.Net.AttackDetections.Dtos

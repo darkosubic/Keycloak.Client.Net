@@ -1,7 +1,7 @@
 # Keycloak.Client.Net
  A resilient and testable .NET Standard 2.0 library for interacting with Keycloak’s Admin REST API, using RestSharp, supporting dependency injection via interfaces, Polly for fault handling, and the Result pattern for predictable outcomes.
 
-**Keycloak.Client.Net** library is still in the development phase, and **3** out of **373** endpoint clients are implemented at this moment.
+**Keycloak.Client.Net** library is still in the development phase, and **14** out of **373** endpoint clients are implemented at this moment.
 
 ## Usage
 As this is a .NET Standard 2.0 library, it is possible to use this library with the following .NET Implementations:
@@ -59,7 +59,7 @@ There are a few things to notice:
 | Clients                      | ❌         |
 | Component                    | ❌         |
 | default                      | ❌         |
-| Groups                       | ❌         |
+| Groups                       | ✅         |
 | Identity Providers           | ❌         |
 | Key                          | ❌         |
 | Organizations                | ❌         |

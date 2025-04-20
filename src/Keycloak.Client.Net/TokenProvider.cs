@@ -159,6 +159,7 @@ namespace Keycloak.Client.Net
                 return;
             }
 
+            await _semaphore.WaitAsync();
             try
             {
                 if (_refreshTokenHttpClient == null)
