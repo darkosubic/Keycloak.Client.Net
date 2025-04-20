@@ -11,7 +11,6 @@ using Keycloak.Client.Net.Groups.DTOs.Interfaces;
 using Keycloak.Client.Net.Users.DTOs;
 using Keycloak.Client.Net.Users.Inerfaces;
 using RestSharp;
-using static Keycloak.Client.Net.Constants.StandardResponseMessages;
 
 namespace Keycloak.Client.Net.Groups
 {
@@ -118,7 +117,7 @@ namespace Keycloak.Client.Net.Groups
         Task<Result> MoveToTopOrCreateNew(GroupDto getGroupMembers);
     }
 
-    public class Group : IGroups
+    public class Group : ClientBase, IGroups
     {
         private readonly IKeycloakHttpClient _apiClient;
         private const string GroupsEndpoint = "groups";
@@ -141,16 +140,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return JsonSerializer.Deserialize<GetGroupCountResponseDto>(response.Content);
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireListRoleRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
-
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                
+                return HandleStandardErrorResponses(RequireListRoleRequirement, response);
             }
             catch (Exception ex)
             {
@@ -190,16 +181,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return JsonSerializer.Deserialize<List<GroupDto>>(response.Content);
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireListRoleRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireListRoleRequirement, response);
             }
             catch (Exception ex)
             {
@@ -252,16 +235,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return JsonSerializer.Deserialize<List<GroupDto>>(response.Content);
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireViewRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireViewRequirement, response);
             }
             catch (Exception ex)
             {
@@ -305,16 +280,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return Result.Success();
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireManageRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireManageRequirement, response);
             }
             catch (Exception ex)
             {
@@ -335,16 +302,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return Result.Success();
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireManageRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireManageRequirement, response);
             }
             catch (Exception ex)
             {
@@ -364,16 +323,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return JsonSerializer.Deserialize<GroupDto>(response.Content);
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireViewRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireViewRequirement, response);
             }
             catch (Exception ex)
             {
@@ -393,16 +344,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return JsonSerializer.Deserialize<ClientManagementPermissionDto>(response.Content);
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireViewRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireViewRequirement, response);
             }
             catch (Exception ex)
             {
@@ -424,16 +367,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return JsonSerializer.Deserialize<ClientManagementPermissionDto>(response.Content);
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireManageRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireManageRequirement, response);
             }
             catch (Exception ex)
             {
@@ -457,16 +392,8 @@ namespace Keycloak.Client.Net.Groups
 
                     return Result.Success(deserializedResult.Cast<IUserRepresentationDto>().ToList());
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireViewMembersRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireViewMembersRequirement, response);
 
             }
             catch (Exception ex)
@@ -510,16 +437,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return Result.Success();
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireManageRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
+                return HandleStandardErrorResponses(RequireManageRequirement, response);
 
             }
             catch (Exception ex)
@@ -547,17 +466,8 @@ namespace Keycloak.Client.Net.Groups
                 {
                     return Result.Success();
                 }
-                else if (response.StatusCode == HttpStatusCode.Forbidden)
-                {
-                    return Result.Forbidden(ForbiddenMessage(RequireManageRequirement));
-                }
-                else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized(UnauthorizedMessage);
-                }
 
-                return Result.Error(RequestFailedMessage(response.StatusCode, response.Content));
-
+                return HandleStandardErrorResponses(RequireManageRequirement, response);
             }
             catch (Exception ex)
             {

@@ -16,7 +16,7 @@ namespace Keycloak.Client.Net.AttackDetections
         Task<Result<IStatusOfAUsernameInBruteForceDetectionDto>> GetStatusOfAUsernameInBruteForceDetection(string userId);
     }
 
-    public class AttackDetection : IAttackDetection
+    public class AttackDetection : ClientBase, IAttackDetection
     {
         private readonly IKeycloakHttpClient _apiClient;
         private const string AtackDetectionEndpoint = "/attack-detection/brute-force/users";
@@ -38,13 +38,8 @@ namespace Keycloak.Client.Net.AttackDetections
                 {
                     return JsonSerializer.Deserialize<StatusOfAUsernameInBruteForceDetectionDto>(response.Content);
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    return Result<IStatusOfAUsernameInBruteForceDetectionDto>.Unauthorized("Unauthorized. Make sure your token includes the an realm-admin or manage-users role.");
-                }
 
-                return Result<IStatusOfAUsernameInBruteForceDetectionDto>.Error($"Failed to get an OK status. Response message: {response.Content}");
-
+                return HandleStandardErrorResponses(RequireViewRequirement, response);
             }
             catch (Exception ex)
             {
@@ -64,13 +59,8 @@ namespace Keycloak.Client.Net.AttackDetections
                 {
                     return Result.Success();
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized("Unauthorized. Make sure your token includes the an realm-admin or manage-users role.");
-                }
 
-                return Result.Error($"Failed to get an OK status. Response message: {response.Content}");
-
+                return HandleStandardErrorResponses(RequireManageRequirement, response);
             }
             catch (Exception ex)
             {
@@ -90,19 +80,17 @@ namespace Keycloak.Client.Net.AttackDetections
                 {
                     return Result.Success();
                 }
-                else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    return Result.Unauthorized("Unauthorized. Make sure your token includes the an realm-admin or manage-users role.");
-                }
 
-                return Result.Error($"Failed to get an OK status. Response message: {response.Content}");
-
+                return HandleStandardErrorResponses(RequireManageRequirement, response);
             }
             catch (Exception ex)
             {
                 return ex.FailureFromException<Result>();
             }
         }
+
+        private const string RequireManageRequirement = "MANAGE_CLIENTS";
+        private const string RequireViewRequirement = "MANAGE_USERS || VIEW_USERS";
     }
 
 }
