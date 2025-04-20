@@ -11,8 +11,31 @@ namespace Keycloak.Client.Net.AttackDetections
 {
     public interface IAttackDetection
     {
+        /// <summary>
+        /// Calls the DELETE /admin/realms/{realm}/attack-detection/brute-force/users ENDPOINT<br/>
+        /// Documentation description: Returns the groups counts.<br/>
+        /// <see href="https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/services/resources/admin/AttackDetectionResource.java#L173">Github link</see> to the Api this method consumes <br/>
+        /// Method it consumes: AttackDetectionResource.clearAllBruteForce
+        /// Auth requirements: MANAGE_CLIENTS
+        /// </summary>
         Task<Result> ClearAnyUserLoginFailuresForAllUsers();
+
+        /// <summary>
+        /// Calls the DELETE /admin/realms/{realm}/attack-detection/brute-force/users ENDPOINT<br/>
+        /// Documentation description: Returns the groups counts.<br/>
+        /// <see href="https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/services/resources/admin/AttackDetectionResource.java#L149">Github link</see> to the Api this method consumes <br/>
+        /// Method it consumes: AttackDetectionResource.clearBruteForceForUser
+        /// Auth requirements: MANAGE_CLIENTS
+        /// </summary>
         Task<Result> ClearAnyUserLoginFailuresForTheUser(string userId);
+
+        /// <summary>
+        /// Calls the DELETE /admin/realms/{realm}/attack-detection/brute-force/users ENDPOINT<br/>
+        /// Documentation description: Returns the groups counts.<br/>
+        /// <see href="https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/services/resources/admin/AttackDetectionResource.java#L187">Github link</see> to the Api this method consumes <br/>
+        /// Method it consumes: AttackDetectionResource.bruteForceUserStatus
+        /// Auth requirements: MANAGE_USERS || VIEW_USERS
+        /// </summary>
         Task<Result<IStatusOfAUsernameInBruteForceDetectionDto>> GetStatusOfAUsernameInBruteForceDetection(string userId);
     }
 
