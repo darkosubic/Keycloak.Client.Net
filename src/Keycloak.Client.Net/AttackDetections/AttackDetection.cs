@@ -13,7 +13,7 @@ namespace Keycloak.Client.Net.AttackDetections
     {
         /// <summary>
         /// Calls the DELETE /admin/realms/{realm}/attack-detection/brute-force/users ENDPOINT<br/>
-        /// Documentation description: Returns the groups counts.<br/>
+        /// Documentation description: Clear any user login failures for all users This can release temporary disabled users<br/>
         /// <see href="https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/services/resources/admin/AttackDetectionResource.java#L173">Github link</see> to the Api this method consumes <br/>
         /// Method it consumes: AttackDetectionResource.clearAllBruteForce
         /// Auth requirements: MANAGE_CLIENTS
@@ -21,8 +21,8 @@ namespace Keycloak.Client.Net.AttackDetections
         Task<Result> ClearAnyUserLoginFailuresForAllUsers();
 
         /// <summary>
-        /// Calls the DELETE /admin/realms/{realm}/attack-detection/brute-force/users ENDPOINT<br/>
-        /// Documentation description: Returns the groups counts.<br/>
+        /// Calls the DELETE /admin/realms/{realm}/attack-detection/brute-force/users/{userId} ENDPOINT<br/>
+        /// Documentation description: Clear any user login failures for the user This can release temporary disabled user<br/>
         /// <see href="https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/services/resources/admin/AttackDetectionResource.java#L149">Github link</see> to the Api this method consumes <br/>
         /// Method it consumes: AttackDetectionResource.clearBruteForceForUser
         /// Auth requirements: MANAGE_CLIENTS
@@ -30,8 +30,8 @@ namespace Keycloak.Client.Net.AttackDetections
         Task<Result> ClearAnyUserLoginFailuresForTheUser(string userId);
 
         /// <summary>
-        /// Calls the DELETE /admin/realms/{realm}/attack-detection/brute-force/users ENDPOINT<br/>
-        /// Documentation description: Returns the groups counts.<br/>
+        /// Calls the GET /admin/realms/{realm}/attack-detection/brute-force/users/{userId} ENDPOINT<br/>
+        /// Documentation description: Get status of a username in brute force detection<br/>
         /// <see href="https://github.com/keycloak/keycloak/blob/main/services/src/main/java/org/keycloak/services/resources/admin/AttackDetectionResource.java#L187">Github link</see> to the Api this method consumes <br/>
         /// Method it consumes: AttackDetectionResource.bruteForceUserStatus
         /// Auth requirements: MANAGE_USERS || VIEW_USERS
