@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Keycloak.Client.Net.AttackDetections;
 using Keycloak.Client.Net.Groups;
+using Keycloak.Client.Net.Users;
 using Polly.Retry;
 using RestSharp;
 using static Keycloak.Client.Net.Constants.RouteConstants;
@@ -88,6 +89,33 @@ namespace Keycloak.Client.Net
                 lock (_groupsLock)
                 {
                     _groups = value;
+                }
+            }
+        }
+
+        private readonly object _usersLock = new object();
+        private IUsers _users;
+        public IUsers Users
+        {
+            get
+            {
+                if (_users == null)
+                {
+                    lock (_usersLock)
+                    {
+                        if (_users == null)
+                        {
+                            _users = new User(this);
+                        }
+                    }
+                }
+                return _users;
+            }
+            set
+            {
+                lock (_usersLock)
+                {
+                    _users = value;
                 }
             }
         }

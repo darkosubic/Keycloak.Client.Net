@@ -1,5 +1,6 @@
 ﻿using Keycloak.Client.Net.AttackDetections;
 using Keycloak.Client.Net.Groups;
+using Keycloak.Client.Net.Users;
 using RestSharp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -17,5 +18,6 @@ namespace Keycloak.Client.Net
 
         IAttackDetection AttackDetections { get; set; }
         IGroups Groups { get; set; }
+        IUsers Users { get; set; }
     }
 }
