@@ -18,6 +18,11 @@ namespace Keycloak.Client.Net
         public readonly AsyncRetryPolicy<RestResponse> _retryPolicy;
         private readonly ITokenProvider _tokenProvider;
 
+        private const string AuthorizationHeader = "Authorization";
+        private const string AcceptHeader = "Accept";
+        private const string AppJson = "application/json";
+        private const string Bearer = "Bearer";
+
         public string BaseUrl => RealmSettings.Url + "/" + RouteAdmin;
 
         public RealmSettings RealmSettings { get; private set; }
@@ -130,6 +135,34 @@ namespace Keycloak.Client.Net
             return await _restClient.ExecuteAsync(Request);
         }
 
+        public async Task<RestRequest> Create(string endpoint, Method method)
+        {
+            if (Request == null)
+            {
+                InitializeRequest();
+            }
+
+            ClearRequest();
+
+            Request.AddHeader(AuthorizationHeader, $"{Bearer} {await _tokenProvider.GetTokenAsync()}");
+            Request.AddHeader(AcceptHeader, AppJson);
+
+            Request.Method = method;
+
+            Request.Resource = endpoint;
+
+            return Request;
+        }
+
+        private void InitializeRequest()
+        {
+            Request = new RestRequest();
+            Request.AddHeader("Content-Type", AppJson);
+            Request.AddHeader("Cache-Control", "no-cache");
+            Request.AddHeader("Accept", "*/*");
+            Request.AddHeader("Accept-Encoding", "gzip, deflate");
+        }
+
         public void AddQueryStrings(Dictionary<string, string> queryStrings)
         {
             if (queryStrings == null || queryStrings.Count == 0)
@@ -143,36 +176,28 @@ namespace Keycloak.Client.Net
             }
         }
 
-        public void AddJsonBodyParameters(object obj)
-        {
-            Request.AddJsonBody(JsonSerializer.Serialize(obj));
-        }
-        public async Task<RestRequest> Create(string endpoint, Method method)
+        public void AddJsonBodyParameters(object body)
         {
             if (Request == null)
             {
-                Request = new RestRequest();
+                InitializeRequest();
             }
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                WriteIndented = true
+            };
 
-            const string AuthorizationHeader = "Authorization";
-            const string AcceptHeader = "Accept";
-            const string AppJson = "application/json";
-            const string Bearer = "Bearer";
-
-            ClearRequest(AuthorizationHeader);
-
-            Request.AddHeader(AuthorizationHeader, $"{Bearer} {await _tokenProvider.GetTokenAsync()}");
-            Request.AddHeader(AcceptHeader, AppJson);
-
-            Request.Method = method;
-
-            Request.Resource = endpoint;
-
-            return Request;
+            Request.AddJsonBody(JsonSerializer.Serialize(body, options), ContentType.Json);
         }
 
-        private void ClearRequest(string AuthorizationHeader)
+        public void ClearRequest()
         {
+            if (Request == null)
+            {
+                InitializeRequest();
+            }
+
             Request.Parameters.RemoveParameter(AuthorizationHeader);
 
             List<Parameter> queryStringParams = Request.Parameters.Where(p => p.Type == ParameterType.QueryString).ToList();

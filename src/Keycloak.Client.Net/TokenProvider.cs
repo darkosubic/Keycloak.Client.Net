@@ -61,7 +61,7 @@ namespace Keycloak.Client.Net
                     return string.Empty;
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 ResetTokenData();
 
@@ -84,6 +84,7 @@ namespace Keycloak.Client.Net
                     request.AddParameter(TokenProviderParameterNameConstants.GrantType, TokenGrantType.ClientCredentials);
                     request.AddParameter(TokenProviderParameterNameConstants.ClientId, _clientCredentials.ClientId);
                     request.AddParameter(TokenProviderParameterNameConstants.ClientSecret, _clientCredentials.ClientSecret);
+                    request.AddParameter("scope", "openid offline_access");
                 }
                 break;
                 case TokenGrantType.AuthorizationCode:
@@ -93,6 +94,7 @@ namespace Keycloak.Client.Net
                     request.AddParameter(TokenProviderParameterNameConstants.ClientSecret, _clientCredentials.ClientSecret);
                     request.AddParameter(TokenProviderParameterNameConstants.Code, _clientCredentials.Code);
                     request.AddParameter(TokenProviderParameterNameConstants.RedirectUri, _clientCredentials.RedirectUri);
+                    request.AddParameter("scope", "openid offline_access");
                 }
                 break;
                 case TokenGrantType.Password:
@@ -102,6 +104,7 @@ namespace Keycloak.Client.Net
                     request.AddParameter(TokenProviderParameterNameConstants.ClientSecret, _clientCredentials.ClientSecret);
                     request.AddParameter(TokenProviderParameterNameConstants.Username, _clientCredentials.Username);
                     request.AddParameter(TokenProviderParameterNameConstants.Password, _clientCredentials.Password);
+                    //request.AddParameter("scope", "openid offline_access");
                 }
                 break;
                 case TokenGrantType.DeviceAuthorization:
@@ -109,6 +112,7 @@ namespace Keycloak.Client.Net
                     request.AddParameter(TokenProviderParameterNameConstants.GrantType, TokenGrantType.DeviceAuthorization);
                     request.AddParameter(TokenProviderParameterNameConstants.ClientId, _clientCredentials.ClientId);
                     request.AddParameter(TokenProviderParameterNameConstants.DeviceCode, _clientCredentials.DeviceCode);
+                    request.AddParameter("scope", "openid offline_access");
                 }
                 break;
 
