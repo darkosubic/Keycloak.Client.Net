@@ -7,6 +7,7 @@ using Keycloak.Client.Net.Groups;
 using Keycloak.Client.Net.Groups.DTOs;
 using Keycloak.Client.Net.Groups.DTOs.Interfaces;
 using Keycloak.Client.Net.Users.DTOs;
+using Keycloak.Client.Net.Users.DTOs.Interfaces;
 using Keycloak.Client.Net.Users.Inerfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -84,5 +85,18 @@ IKeycloakHttpClient keycloakHttpClient = ApiClientBuilder.New()
 Result<int> filteredUserCount = await keycloakHttpClient.Users.GetUserCount(GetUsersCountDto.GetUserCountBySearchTerm().WithSearchTerm("test").Build());
 Result<int> allUserCount = await keycloakHttpClient.Users.GetUserCount(GetUsersCountDto.GetAllUserCount().GetAll().Build());
 Result<int> userCountByEmail = await keycloakHttpClient.Users.GetUserCount(GetUsersCountDto.GetUserCountBySearchCriteria().WithEmail("test@user.com").Build());
+
+Result<List<IUserRepresentationDto>> usersById1 = await keycloakHttpClient.Users.GetUsers(GetsUserRequestDto.GetUsersByIds().WithASingleUserId("someId").Build());
+Result<List<IUserRepresentationDto>> usersByFilters = await keycloakHttpClient.Users.GetUsers(GetsUserRequestDto.GetUsersByFilters()
+    .WithEmailVerified(true)
+    .WithBriefRepresentation(false)
+    .WithEmail("Dsubic@gmail.com")
+    .WithExact(true)
+    /*.WithIdpAlias()*/.Build());
+
+Result<List<IUserRepresentationDto>> usersBySearchTerm1 = await keycloakHttpClient.Users.GetUsers(GetsUserRequestDto.GetUsersBySearchTerm().WithSearch("test").WithExact(true).Build());
+Result<List<IUserRepresentationDto>> usersBySearchTerm2 = await keycloakHttpClient.Users.GetUsers(GetsUserRequestDto.GetUsersBySearchTerm().WithInfixSearch("test").WithExact(true).Build());
+Result<List<IUserRepresentationDto>> usersBySearchTerm3 = await keycloakHttpClient.Users.GetUsers(GetsUserRequestDto.GetUsersBySearchTerm().WithInfixSearch("est").WithExact(true).Build());
+
 
 Console.ReadKey();
